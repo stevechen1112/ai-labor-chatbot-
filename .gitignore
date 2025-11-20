@@ -88,6 +88,7 @@ data/chroma/
 test_results/
 *.md
 !README.md
+!DEPLOY_TO_LINODE.md
 
 # Archives
 *.tar.gz
