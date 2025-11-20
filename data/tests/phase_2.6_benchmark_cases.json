@@ -1,0 +1,307 @@
+{
+  "meta": {
+    "description": "Phase 2.6 高鑑別度評測集",
+    "purpose": "精準對比 2.0 / 2.5 / 2.6 的能力差異",
+    "total_cases": 25,
+    "categories": {
+      "critical_failures": "2.0/2.5 明確失敗的案例",
+      "confusion_pairs": "容易混淆的法律場景對照組",
+      "negative_tests": "負向測試：不該出現的法條",
+      "edge_cases": "邊界案例"
+    }
+  },
+  "test_cases": [
+    {
+      "id": "CRITICAL_01",
+      "category": "critical_failures",
+      "question": "員工年資 15 年被資遣，公司給付資遣費時扣除先前預告期間的工資，這樣計算正確嗎？",
+      "expected_classification": {
+        "main_issue_must_contain": ["資遣"],
+        "main_issue_must_not_contain": ["加班", "overtime"],
+        "required_laws": ["勞動基準法"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞動基準法", "article": "16", "reason": "預告期規定"},
+          {"law": "勞動基準法", "article": "17", "reason": "資遣費計算"}
+        ],
+        "must_not_in_top5": [
+          {"law": "勞動基準法", "article": "24", "reason": "加班費條文不相關"},
+          {"law": "勞動基準法", "article": "32", "reason": "工時延長不相關"}
+        ],
+        "nice_to_have": [
+          {"law": "勞動基準法", "article": "11", "reason": "資遣事由"}
+        ]
+      },
+      "known_failures": {
+        "2.0": "誤判為 overtime，檢索到第 13、12、11 條",
+        "2.5": "無改善"
+      },
+      "scoring_weight": 3.0,
+      "why_critical": "典型的 topic 誤判問題，2.0 完全錯誤"
+    },
+    {
+      "id": "CRITICAL_02",
+      "category": "critical_failures",
+      "question": "公司要資遣員工，完整的流程是什麼？需要注意哪些法律規定？",
+      "expected_classification": {
+        "main_issue_must_contain": ["資遣"],
+        "main_issue_must_not_contain": ["解僱", "辭職"],
+        "required_laws": ["勞動基準法", "就業服務法"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞動基準法", "article": "11", "reason": "資遣事由"},
+          {"law": "勞動基準法", "article": "16", "reason": "預告期"},
+          {"law": "勞動基準法", "article": "17", "reason": "資遣費"},
+          {"law": "就業服務法", "article": "33", "reason": "通報義務"}
+        ],
+        "must_not_in_top5": [],
+        "nice_to_have": []
+      },
+      "known_failures": {
+        "2.0": "只檢索到第 11、17 條，遺漏第 16 條和就服法",
+        "2.5": "無顯著改善"
+      },
+      "scoring_weight": 3.0,
+      "why_critical": "多面向問題，檢驗檢索完整性"
+    },
+    {
+      "id": "CRITICAL_03",
+      "category": "critical_failures",
+      "question": "公司規定女性員工懷孕後必須轉調內勤，且薪資調降 20%，理由是考量孕婦安全，這樣合法嗎？",
+      "expected_classification": {
+        "main_issue_must_contain": ["懷孕", "歧視"],
+        "main_issue_must_not_contain": ["工資扣除", "wage_deduction"],
+        "required_laws": ["性別工作平等法", "勞動基準法"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "性別工作平等法", "article": "11", "reason": "性別歧視禁止"},
+          {"law": "勞動基準法", "article": "51", "reason": "妊娠期工作調整"}
+        ],
+        "must_not_in_top5": [],
+        "nice_to_have": [
+          {"law": "性別工作平等法", "article": "7", "reason": "招募僱用禁止歧視"}
+        ]
+      },
+      "known_failures": {
+        "2.0": "誤判為 wage_deduction，只檢索勞基法第 51 條，完全遺漏性平法",
+        "2.5": "無改善"
+      },
+      "scoring_weight": 3.0,
+      "why_critical": "跨法規問題，檢驗法律識別能力"
+    },
+    {
+      "id": "CONFUSION_01A",
+      "category": "confusion_pairs",
+      "question": "員工連續曠職三天，公司可以終止勞動契約嗎？",
+      "expected_classification": {
+        "main_issue_must_contain": ["曠職", "終止契約"],
+        "main_issue_must_not_contain": ["資遣", "退休"],
+        "required_laws": ["勞動基準法"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞動基準法", "article": "12", "reason": "雇主終止契約"}
+        ],
+        "must_not_in_top5": [
+          {"law": "勞動基準法", "article": "11", "reason": "資遣不適用"},
+          {"law": "勞動基準法", "article": "14", "reason": "勞工終止契約"}
+        ],
+        "nice_to_have": []
+      },
+      "known_failures": {},
+      "scoring_weight": 1.5,
+      "why_critical": "與 CONFUSION_01B 對照：雇主終止 vs 資遣"
+    },
+    {
+      "id": "CONFUSION_01B",
+      "category": "confusion_pairs",
+      "question": "公司因為業務緊縮要資遣員工，需要什麼條件？",
+      "expected_classification": {
+        "main_issue_must_contain": ["資遣"],
+        "main_issue_must_not_contain": ["解僱", "曠職"],
+        "required_laws": ["勞動基準法"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞動基準法", "article": "11", "reason": "資遣事由"}
+        ],
+        "must_not_in_top5": [
+          {"law": "勞動基準法", "article": "12", "reason": "不經預告終止不適用"}
+        ],
+        "nice_to_have": [
+          {"law": "勞動基準法", "article": "16", "reason": "預告期"},
+          {"law": "勞動基準法", "article": "17", "reason": "資遣費"}
+        ]
+      },
+      "known_failures": {},
+      "scoring_weight": 1.5,
+      "why_critical": "與 CONFUSION_01A 對照：資遣 vs 雇主終止"
+    },
+    {
+      "id": "CONFUSION_02A",
+      "category": "confusion_pairs",
+      "question": "每天加班 2 小時，加班費應該怎麼計算？",
+      "expected_classification": {
+        "main_issue_must_contain": ["加班"],
+        "main_issue_must_not_contain": ["資遣", "工資扣除"],
+        "required_laws": ["勞動基準法"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞動基準法", "article": "24", "reason": "延長工時工資"}
+        ],
+        "must_not_in_top5": [
+          {"law": "勞動基準法", "article": "16", "reason": "預告期不相關"},
+          {"law": "勞動基準法", "article": "17", "reason": "資遣費不相關"}
+        ],
+        "nice_to_have": [
+          {"law": "勞動基準法", "article": "32", "reason": "延長工時規定"}
+        ]
+      },
+      "known_failures": {},
+      "scoring_weight": 1.5,
+      "why_critical": "與 CONFUSION_02B 對照：加班 vs 工資爭議"
+    },
+    {
+      "id": "CONFUSION_02B",
+      "category": "confusion_pairs",
+      "question": "公司遲發工資兩個月，勞工可以怎麼做？",
+      "expected_classification": {
+        "main_issue_must_contain": ["工資", "給付"],
+        "main_issue_must_not_contain": ["加班"],
+        "required_laws": ["勞動基準法"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞動基準法", "article": "14", "reason": "勞工終止契約"}
+        ],
+        "must_not_in_top5": [
+          {"law": "勞動基準法", "article": "24", "reason": "加班費不相關"}
+        ],
+        "nice_to_have": [
+          {"law": "勞動基準法", "article": "22", "reason": "工資計算"},
+          {"law": "勞動基準法", "article": "23", "reason": "工資給付"}
+        ]
+      },
+      "known_failures": {},
+      "scoring_weight": 1.5,
+      "why_critical": "與 CONFUSION_02A 對照：工資爭議 vs 加班"
+    },
+    {
+      "id": "NEGATIVE_01",
+      "category": "negative_tests",
+      "question": "請假規定是什麼？",
+      "expected_classification": {
+        "main_issue_must_contain": ["請假"],
+        "main_issue_must_not_contain": ["資遣", "加班"],
+        "required_laws": ["勞動基準法", "勞工請假規則"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞工請假規則", "article": "2", "reason": "事假"}
+        ],
+        "must_not_in_top5": [
+          {"law": "勞動基準法", "article": "16", "reason": "預告期完全不相關"},
+          {"law": "勞動基準法", "article": "17", "reason": "資遣費完全不相關"},
+          {"law": "勞動基準法", "article": "24", "reason": "加班費完全不相關"}
+        ],
+        "nice_to_have": [
+          {"law": "勞動基準法", "article": "43", "reason": "請假期間工資"}
+        ]
+      },
+      "known_failures": {},
+      "scoring_weight": 2.0,
+      "why_critical": "負向測試：確保不會亂拉不相關法條"
+    },
+    {
+      "id": "NEGATIVE_02",
+      "category": "negative_tests",
+      "question": "基本工資是多少？",
+      "expected_classification": {
+        "main_issue_must_contain": ["工資", "基本"],
+        "main_issue_must_not_contain": ["資遣", "加班", "懷孕"],
+        "required_laws": ["勞動基準法"],
+        "forbidden_laws": ["性別工作平等法", "就業服務法"]
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞動基準法", "article": "21", "reason": "基本工資"}
+        ],
+        "must_not_in_top5": [
+          {"law": "性別工作平等法", "article": "11", "reason": "性別歧視完全不相關"},
+          {"law": "就業服務法", "article": "33", "reason": "資遣通報完全不相關"}
+        ],
+        "nice_to_have": []
+      },
+      "known_failures": {},
+      "scoring_weight": 2.0,
+      "why_critical": "負向測試：簡單問題不該觸發複雜檢索"
+    },
+    {
+      "id": "EDGE_01",
+      "category": "edge_cases",
+      "question": "試用期被解僱，有資遣費嗎？",
+      "expected_classification": {
+        "main_issue_must_contain": ["試用期", "解僱"],
+        "main_issue_must_not_contain": [],
+        "required_laws": ["勞動基準法"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞動基準法", "article": "12", "reason": "雇主終止契約"}
+        ],
+        "must_not_in_top5": [],
+        "nice_to_have": [
+          {"law": "勞動基準法", "article": "11", "reason": "資遣事由"}
+        ]
+      },
+      "known_failures": {},
+      "scoring_weight": 1.0,
+      "why_critical": "邊界案例：試用期 + 解僱"
+    },
+    {
+      "id": "STANDARD_01",
+      "category": "standard",
+      "question": "勞工可以拒絕加班嗎？",
+      "expected_classification": {
+        "main_issue_must_contain": ["加班"],
+        "main_issue_must_not_contain": ["資遣"],
+        "required_laws": ["勞動基準法"],
+        "forbidden_laws": []
+      },
+      "expected_retrieval": {
+        "must_have_articles": [
+          {"law": "勞動基準法", "article": "32", "reason": "延長工時規定"}
+        ],
+        "must_not_in_top5": [],
+        "nice_to_have": [
+          {"law": "勞動基準法", "article": "42", "reason": "加班同意"}
+        ]
+      },
+      "known_failures": {},
+      "scoring_weight": 1.0,
+      "why_critical": "標準案例：基本功能驗證"
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+

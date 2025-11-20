@@ -1,0 +1,282 @@
+{
+  "test_cases": [
+    {
+      "id": "Q01",
+      "category": "資遣",
+      "question": "公司要資遣員工，完整的流程是什麼？需要注意哪些法律規定？",
+      "complexity": "high",
+      "known_issues": "2.0模式缺少第16條（預告期）和就業服務法第33條（通報義務）",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "11", "reason": "資遣事由"},
+        {"law": "勞動基準法", "article": "16", "reason": "預告期規定"},
+        {"law": "勞動基準法", "article": "17", "reason": "資遣費計算"},
+        {"law": "就業服務法", "article": "33", "reason": "通報義務"}
+      ]
+    },
+    {
+      "id": "Q02",
+      "category": "解僱",
+      "question": "員工連續曠職三天，公司可以直接解僱嗎？需要什麼程序？",
+      "complexity": "high",
+      "known_issues": "可能缺少解僱程序和懲戒要件",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "12", "reason": "懲戒解僱事由"},
+        {"law": "勞動基準法", "article": "16", "reason": "是否需要預告"},
+        {"law": "勞動基準法", "article": "18", "reason": "不得請求資遣費的情況"}
+      ]
+    },
+    {
+      "id": "Q03",
+      "category": "大量解僱",
+      "question": "公司因業務緊縮要一次資遣 50 人，需要遵守什麼法律程序？",
+      "complexity": "high",
+      "known_issues": "需要大量解僱勞工保護法",
+      "expected_articles": [
+        {"law": "大量解僱勞工保護法", "article": "4", "reason": "大量解僱定義"},
+        {"law": "大量解僱勞工保護法", "article": "4-1", "reason": "協商程序"},
+        {"law": "就業服務法", "article": "33", "reason": "通報義務"}
+      ]
+    },
+    {
+      "id": "Q04",
+      "category": "加班",
+      "question": "平日加班、假日出勤、國定假日加班，這三種加班費怎麼算？",
+      "complexity": "medium",
+      "known_issues": "需要完整涵蓋三種情境",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "24", "reason": "延長工時加給"},
+        {"law": "勞動基準法", "article": "39", "reason": "例假日及休息日工資加給"},
+        {"law": "勞動基準法", "article": "37", "reason": "國定假日規定"}
+      ]
+    },
+    {
+      "id": "Q05",
+      "category": "工資",
+      "question": "公司可以用「業績不佳」為由扣減員工薪水嗎？工資保護有哪些規定？",
+      "complexity": "medium",
+      "known_issues": "需要工資保護和扣款限制",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "22", "reason": "工資基本原則"},
+        {"law": "勞動基準法", "article": "26", "reason": "預扣工資禁止"},
+        {"law": "勞動基準法", "article": "21", "reason": "基本工資"}
+      ]
+    },
+    {
+      "id": "Q06",
+      "category": "特休",
+      "question": "特休假沒休完可以折現嗎？公司可以強制指定員工什麼時候休特休嗎？",
+      "complexity": "medium",
+      "known_issues": "需要特休行使和未休換錢規定",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "38", "reason": "特別休假"},
+        {"law": "勞動基準法施行細則", "article": "24-1", "reason": "未休完折現規定"}
+      ]
+    },
+    {
+      "id": "Q07",
+      "category": "職災",
+      "question": "員工發生職業災害，公司需要負擔什麼責任？員工有哪些權益？",
+      "complexity": "high",
+      "known_issues": "需要跨職災補償、醫療、不得終止契約等多個面向",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "59", "reason": "職災補償"},
+        {"law": "勞動基準法", "article": "13", "reason": "職災期間不得終止契約"},
+        {"law": "職業安全衛生法", "article": "37", "reason": "職災調查與通報"}
+      ]
+    },
+    {
+      "id": "Q08",
+      "category": "工時",
+      "question": "正常工時、加班時數上限、休息時間，這些規定是什麼？",
+      "complexity": "medium",
+      "known_issues": "需要涵蓋多個工時相關條文",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "30", "reason": "正常工作時間"},
+        {"law": "勞動基準法", "article": "32", "reason": "延長工作時間"},
+        {"law": "勞動基準法", "article": "35", "reason": "休息時間"}
+      ]
+    },
+    {
+      "id": "Q09",
+      "category": "退休",
+      "question": "勞工可以自請退休的條件是什麼？退休金怎麼計算？",
+      "complexity": "medium",
+      "known_issues": "需要涵蓋舊制和新制",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "53", "reason": "自請退休條件"},
+        {"law": "勞動基準法", "article": "55", "reason": "舊制退休金計算"},
+        {"law": "勞工退休金條例", "article": "14", "reason": "新制退休金請領"}
+      ]
+    },
+    {
+      "id": "Q10",
+      "category": "童工",
+      "question": "未滿 18 歲的員工，雇主在工時和工作內容上有什麼限制？",
+      "complexity": "medium",
+      "known_issues": "需要童工和未成年工保護規定",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "44", "reason": "童工工作時間限制"},
+        {"law": "勞動基準法", "article": "45", "reason": "童工工作時間"},
+        {"law": "勞動基準法", "article": "49", "reason": "童工夜間工作禁止"}
+      ]
+    },
+    {
+      "id": "Q11",
+      "category": "女工",
+      "question": "女性員工懷孕期間，有哪些特別的勞動保護規定？",
+      "complexity": "medium",
+      "known_issues": "需要產假、不得終止契約等規定",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "50", "reason": "產假"},
+        {"law": "性別工作平等法", "article": "15", "reason": "產假和陪產假"},
+        {"law": "勞動基準法", "article": "13", "reason": "懷孕期間解僱限制"}
+      ]
+    },
+    {
+      "id": "Q12",
+      "category": "契約",
+      "question": "公司可以跟員工簽訂「試用期不受勞基法保護」的條款嗎？",
+      "complexity": "medium",
+      "known_issues": "需要勞動契約原則和無效條款",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "2", "reason": "勞動契約定義"},
+        {"law": "勞動基準法", "article": "9-1", "reason": "試用期規定"},
+        {"law": "勞動基準法", "article": "71", "reason": "本法效力"}
+      ]
+    },
+    {
+      "id": "Q13",
+      "category": "派遣",
+      "question": "派遣勞工的權益保護有哪些規定？要派公司和派遣公司各自的責任是什麼？",
+      "complexity": "high",
+      "known_issues": "需要派遣相關法規",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "17-1", "reason": "派遣勞工資遣費"},
+        {"law": "就業服務法", "article": "47", "reason": "私立就業服務機構許可"},
+        {"law": "勞動基準法", "article": "2", "reason": "雇主定義"}
+      ]
+    },
+    {
+      "id": "Q14",
+      "category": "違約金",
+      "question": "公司要求員工簽「最低服務年限條款」，如果員工提前離職要賠償違約金，這合法嗎？",
+      "complexity": "medium",
+      "known_issues": "需要最低服務年限和違約金限制",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "15-1", "reason": "最低服務年限"},
+        {"law": "勞動基準法", "article": "15", "reason": "定期契約"},
+        {"law": "勞動基準法", "article": "26", "reason": "預扣工資禁止"}
+      ]
+    },
+    {
+      "id": "Q15",
+      "category": "工資給付",
+      "question": "公司延遲發薪、用商品抵工資，這些做法合法嗎？會有什麼法律責任？",
+      "complexity": "medium",
+      "known_issues": "需要工資給付原則和罰則",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "22", "reason": "工資給付"},
+        {"law": "勞動基準法", "article": "23", "reason": "工資給付日期"},
+        {"law": "勞動基準法", "article": "79", "reason": "罰則"}
+      ]
+    },
+    {
+      "id": "Q16",
+      "category": "變更勞動契約",
+      "question": "公司可以單方面調動員工到其他城市工作嗎？需要什麼條件？",
+      "complexity": "medium",
+      "known_issues": "需要調動五原則",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "10-1", "reason": "調動五原則"},
+        {"law": "勞動基準法", "article": "14", "reason": "勞工終止契約事由"}
+      ]
+    },
+    {
+      "id": "Q17",
+      "category": "例假與休息日",
+      "question": "例假日、休息日、國定假日有什麼不同？各有什麼規定？",
+      "complexity": "medium",
+      "known_issues": "需要區分三種假別",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "36", "reason": "例假與休息日"},
+        {"law": "勞動基準法", "article": "37", "reason": "國定假日"},
+        {"law": "勞動基準法", "article": "39", "reason": "例假日與休息日工資"}
+      ]
+    },
+    {
+      "id": "Q18",
+      "category": "責任制",
+      "question": "公司說我是「責任制」所以不用給加班費，這合法嗎？",
+      "complexity": "medium",
+      "known_issues": "需要工時彈性和責任制限制",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "84-1", "reason": "責任制工作者"},
+        {"law": "勞動基準法", "article": "24", "reason": "加班費"},
+        {"law": "勞動基準法", "article": "30", "reason": "工作時間"}
+      ]
+    },
+    {
+      "id": "Q19",
+      "category": "勞資爭議",
+      "question": "我跟公司有勞資糾紛，可以透過什麼管道申訴或調解？",
+      "complexity": "medium",
+      "known_issues": "需要申訴管道和調解程序",
+      "expected_articles": [
+        {"law": "勞資爭議處理法", "article": "9", "reason": "調解申請"},
+        {"law": "勞動基準法", "article": "74", "reason": "申訴檢舉"},
+        {"law": "勞資爭議處理法", "article": "6", "reason": "爭議行為"}
+      ]
+    },
+    {
+      "id": "Q20",
+      "category": "綜合",
+      "question": "公司無預警倒閉，積欠工資和資遣費，員工可以怎麼辦？有什麼保障？",
+      "complexity": "high",
+      "known_issues": "需要積欠工資墊償、優先受償權等多個面向",
+      "expected_articles": [
+        {"law": "勞動基準法", "article": "28", "reason": "工資優先受償權"},
+        {"law": "積欠工資墊償基金條例", "article": "2", "reason": "墊償範圍"},
+        {"law": "就業服務法", "article": "33", "reason": "通報義務"},
+        {"law": "勞動基準法", "article": "11", "reason": "資遣事由"}
+      ]
+    }
+  ],
+  "metadata": {
+    "total_cases": 20,
+    "categories": {
+      "資遣": 1,
+      "解僱": 1,
+      "大量解僱": 1,
+      "加班": 1,
+      "工資": 1,
+      "特休": 1,
+      "職災": 1,
+      "工時": 1,
+      "退休": 1,
+      "童工": 1,
+      "女工": 1,
+      "契約": 1,
+      "派遣": 1,
+      "違約金": 1,
+      "工資給付": 1,
+      "變更勞動契約": 1,
+      "例假與休息日": 1,
+      "責任制": 1,
+      "勞資爭議": 1,
+      "綜合": 1
+    },
+    "complexity_distribution": {
+      "high": 6,
+      "medium": 14
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
