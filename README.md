@@ -59,48 +59,53 @@ ai-labor-chatbot/
 │   ├── citation_validator.py  # 🛡️ Phase 0 引用驗證
 │   ├── knowledge_graph.py     # 🕸️ 法規關聯網絡
 │   ├── database.py            # 💾 SQLite 持久化儲存
-│   └── retrieval.py           # 🔍 混合檢索系統
+│   ├── retrieval.py           # 🔍 混合檢索系統
+│   ├── articles.py            # 法條查詢 API
+│   ├── citations.py            # 引用格式化
+│   ├── prompts.py              # UniHR 風格提示詞
+│   ├── query_enhancement.py    # 查詢增強
+│   ├── reranker.py             # 重排序器
+│   ├── rules.py                # 主題規則路由
+│   └── vector_store.py         # 向量儲存管理
 ├── data/                       # 📚 知識庫
 │   ├── laws/                   # 82 部勞動法規 Markdown
 │   ├── index/                  # 檢索索引
 │   │   ├── index.json          # TF-IDF 索引
 │   │   ├── chroma/             # 向量資料庫
-│   │   └── metadata.json       # 法規元數據
+│   │   ├── metadata.json       # 法規元數據
+│   │   ├── regression_report.json    # 回歸測試報告
+│   │   └── regression_failures.json  # 失敗案例
 │   ├── knowledge_graph.json    # 法規關聯圖
 │   ├── law_guides.yaml         # 主題導向指南
-│   └── tests/                  # 測試資料集
+│   ├── citation_validation.json # 引用驗證結果
+│   ├── tests/                  # 測試資料集
+│   │   ├── complex_labor_questions_30.json  # ⭐ 30 題複雜問題
+│   │   ├── phase_2.5_test_cases.json
+│   │   ├── phase_2.6_benchmark_cases.json
+│   │   └── queries.json        # 基準測試問題
+│   └── app.db                  # SQLite 資料庫
 ├── scripts/                    # 🛠️ 開發工具
 │   ├── build_index.py          # 建立 TF-IDF 索引
-│   ├── test_30_questions_v2.6.1.py  # ⭐ 30 題基準測試
-│   └── health_check.py         # 系統健康檢查
+│   ├── build_vectors.py        # 建立向量索引
+│   ├── health_check.py         # 系統健康檢查
+│   ├── regression_tests.py     # 回歸測試
+│   ├── validate_citations.py   # 引用驗證
+│   └── generate_metadata.py    # 生成元數據
 ├── static/                     # 🎨 前端介面
 │   ├── index.html              # 聊天 UI
 │   └── ui.js                   # 前端邏輯
-├── test_results/               # 📊 測試報告（本地）
-│   ├── 30_questions_gpt5mini_v2.6.1/  # ⭐ 最佳測試結果
-│   └── COMPARATIVE_ANALYSIS_v2.6.1.md
+├── logs/                       # 📝 系統日誌
 ├── DEPLOY_TO_LINODE.md         # ☁️ 雲端部署指南
+├── API_INTEGRATION_GUIDE.md    # 🔌 API 串接指南
 ├── requirements.txt            # 📦 Python 依賴
-├── start_server.ps1           # 🚀 本地啟動腳本
 ├── .gitignore                  # 🔒 安全排除檔案
+├── ai_labor_chatbot.tar.gz      # 📦 部署包
 └── README.md                   # 📖 本檔案
 ```
 
 ## 🚀 快速開始
 
-### 方法 1：一鍵啟動（推薦新手）
-
-```powershell
-# 雙擊這個檔案即可啟動服務器
-start_server.ps1
-```
-
-**自動完成**：
-- ✅ 環境檢查（Python、依賴、索引）
-- ✅ 啟動服務器（http://127.0.0.1:8000）
-- ✅ 開啟瀏覽器
-
-### 方法 2：手動啟動（開發者）
+### 本地部署
 
 ```bash
 # 1. 安裝依賴
@@ -116,6 +121,8 @@ python scripts/build_index.py
 # 4. 啟動服務器
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
+
+**訪問地址**：http://127.0.0.1:8000
 
 ### 方法 3：雲端部署
 
@@ -246,7 +253,7 @@ python -c "from app.database import get_db; db = get_db(); db.init_tables()"
 ### 30 題基準測試 ⭐
 ```bash
 # 執行完整的 30 題複雜勞資問題測試
-python scripts/test_30_questions_v2.6.1.py
+python scripts/regression_tests.py --out data/index/regression_report.json --fail-out data/index/regression_failures.json
 
 # 最新結果 (2025-11-16)：
 # ✅ 通過率：30/30（100%）
@@ -347,12 +354,12 @@ chmod +x deploy.sh && ./deploy.sh
 ## 🔄 版本歷史
 
 ### v2.6.1 (2025-11-16) - 多代理系統完成 ⭐
-- ✅ 多代理協作架構（4 個專業 Agent）
+- ✅ 多代理協作架構（接待員、律師、審核員、秘書）
 - ✅ GPT-5-mini 完整整合
-- ✅ 30 題測試 100% 通過
-- ✅ API 串接功能
-- ✅ Linode 雲端部署
-- ✅ GitHub 版本控制
+- ✅ 30 題複雜勞資問題測試 100% 通過
+- ✅ API 串接功能與外部整合
+- ✅ Linode 雲端部署成功
+- ✅ GitHub 版本控制與 CI/CD
 
 ### v2.5 (2025-11-14) - 智能檢索升級
 - ✅ Phase 2.5 智能檢索
@@ -423,7 +430,16 @@ python scripts/build_vectors.py
 git clone https://github.com/stevechen1112/ai-labor-chatbot-.git
 cd ai-labor-chatbot-
 pip install -r requirements.txt
-cp "api key.txt.example" "api key.txt"  # 填入您的 API 金鑰
+
+# 設定 API 金鑰
+echo "openai" > "api key.txt"
+echo "sk-your-openai-key-here" >> "api key.txt"
+
+# 建立知識庫索引
+python scripts/build_index.py
+
+# 啟動服務
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 ## 📞 聯絡方式
