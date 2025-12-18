@@ -397,3 +397,6 @@ echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 **恭喜！您的 AI Labor Chatbot 現在已經部署到雲端，可以被全世界存取了！** 🚀
 
 有任何部署問題歡迎詢問！
+
+
+
