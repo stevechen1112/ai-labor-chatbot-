@@ -1,6 +1,7 @@
 topics:
   wage_deduction:
     name: "曠職／缺勤扣薪"
+    category: "procedure"
     keywords: ["曠職", "缺勤", "扣薪", "無故沒來", "薪水扣"]
     core_articles:
       - law: "勞動基準法"
@@ -13,11 +14,12 @@ topics:
 
   overtime:
     name: "加班費 / 延長工時"
-    keywords: ["加班", "延長工時", "OT", "補休", "工時上限"]
+    category: "right"
+    keywords: ["加班", "加班費", "延長工時", "OT", "補休", "工時上限", "加班怎麼算", "加班計算"]
     core_articles:
       - law: "勞動基準法"
         articles: ["24", "32"]
-        priority: 1.5
+        priority: 1.6
     related_articles:
       - law: "勞動基準法施行細則"
         articles: ["23"]
@@ -26,6 +28,7 @@ topics:
 
   annual_leave:
     name: "特休 / 年假"
+    category: "right"
     keywords: ["特休", "年假", "有薪假", "假期折算"]
     core_articles:
       - law: "勞動基準法"
@@ -38,6 +41,7 @@ topics:
 
   tardiness:
     name: "遲到 / 早退補扣"
+    category: "procedure"
     keywords: ["遲到", "早退", "未打卡", "扣款", "扣錢", "扣多少"]
     core_articles:
       - law: "勞動基準法"
@@ -47,6 +51,7 @@ topics:
 
   attendance_bonus:
     name: "全勤 / 考勤獎金"
+    category: "definition"
     keywords: ["全勤", "考勤", "出勤獎金"]
     core_articles:
       - law: "勞動基準法"
@@ -57,8 +62,22 @@ topics:
         priority: 1.1
     guidance: "說明全勤獎金屬工資範疇，引用勞基法第2條的工資定義。"
 
+  bonus_payment:
+    name: "年終 / 獎金 / 分紅"
+    category: "definition"
+    keywords: ["年終", "年終獎金", "bonus", "獎金", "分紅", "比例給付", "按比例"]
+    core_articles:
+      - law: "勞動基準法"
+        articles: ["2"]
+        priority: 1.8
+      - law: "勞動基準法"
+        articles: ["29"]
+        priority: 1.2
+    guidance: "先以勞基法第2條界定工資（含獎金、經常性給與），必要時補充第29條的給付原則，說明約定性獎金應按在職期間按比例給付。"
+
   severance_pay:
     name: "資遣 / 資遣費"
+    category: "right"
     keywords: ["資遣", "資遣費", "非自願離職"]
     core_articles:
       - law: "勞動基準法"
@@ -71,6 +90,7 @@ topics:
 
   termination_notice:
     name: "終止契約 / 預告期"
+    category: "procedure"
     keywords: ["終止契約", "預告期", "解雇通知"]
     core_articles:
       - law: "勞動基準法"
@@ -80,6 +100,7 @@ topics:
 
   dispatch_labor:
     name: "派遣 / 承攬"
+    category: "definition"
     keywords: ["派遣", "承攬", "借調", "勞務派遣"]
     core_articles:
       - law: "勞動派遣法施行細則"
@@ -92,6 +113,7 @@ topics:
 
   maternity_leave:
     name: "產假 / 產前假"
+    category: "right"
     keywords: ["產假", "產前假", "產檢假"]
     core_articles:
       - law: "性別工作平等法"
@@ -104,6 +126,7 @@ topics:
 
   parental_leave:
     name: "育嬰留職 / 津貼"
+    category: "right"
     keywords: ["育嬰", "留職停薪", "育嬰津貼"]
     core_articles:
       - law: "性別工作平等法"
@@ -116,6 +139,7 @@ topics:
 
   occupational_injury:
     name: "職災 / 劳保給付"
+    category: "right"
     keywords: ["職災", "工傷", "職業病", "職災補償"]
     core_articles:
       - law: "勞工職業災害保險及保護法"
@@ -128,6 +152,7 @@ topics:
 
   salary_delay:
     name: "延遲發薪 / 拖欠工資"
+    category: "procedure"
     keywords: ["延遲發薪", "拖欠工資", "薪水延遲", "延遲", "發薪", "違法"]
     core_articles:
       - law: "勞動基準法"
@@ -137,6 +162,7 @@ topics:
 
   payday_rules:
     name: "薪資結算日 / 發薪日"
+    category: "procedure"
     keywords: ["發薪日", "薪資日", "薪水何時發"]
     core_articles:
       - law: "勞動基準法"
@@ -146,6 +172,7 @@ topics:
 
   probation_period:
     name: "試用期 / 試用薪資"
+    category: "definition"
     keywords: ["試用期", "試用薪資", "試用解雇", "試用", "規定多久"]
     core_articles:
       - law: "勞動基準法"
@@ -155,6 +182,7 @@ topics:
 
   contract_renewal:
     name: "契約續約 / 定期轉不定期"
+    category: "definition"
     keywords: ["續約", "定期契約", "不定期"]
     core_articles:
       - law: "勞動基準法"
@@ -164,6 +192,7 @@ topics:
 
   layoff_plan:
     name: "大量解雇 / 裁員計畫"
+    category: "procedure"
     keywords: ["大量解雇", "裁員", "大量裁員", "大量解僱"]
     core_articles:
       - law: "大量解雇勞工保護法"
@@ -173,6 +202,7 @@ topics:
 
   non_compete:
     name: "競業禁止"
+    category: "definition"
     keywords: ["競業", "競業禁止", "競業條款"]
     core_articles:
       - law: "勞動基準法"
@@ -185,6 +215,7 @@ topics:
 
   confidentiality:
     name: "保密義務 / 個資"
+    category: "procedure"
     keywords: ["保密", "資料外洩", "機密"]
     core_articles:
       - law: "個人資料保護法"
@@ -194,6 +225,7 @@ topics:
 
   travel_allowance:
     name: "差旅費 / 津貼"
+    category: "definition"
     keywords: ["差旅費", "津貼", "出差補助"]
     core_articles:
       - law: "勞動基準法"
@@ -203,6 +235,7 @@ topics:
 
   hazard_allowance:
     name: "危險津貼 / 特殊作業"
+    category: "right"
     keywords: ["危險津貼", "有害作業", "高溫津貼"]
     core_articles:
       - law: "職業安全衛生法"
@@ -215,6 +248,7 @@ topics:
 
   remote_work:
     name: "遠距 / 在家工作"
+    category: "procedure"
     keywords: ["遠距", "在家工作", "WFH"]
     core_articles:
       - law: "勞動基準法"
@@ -227,6 +261,7 @@ topics:
 
   break_time:
     name: "休息時間 / 用餐"
+    category: "right"
     keywords: ["休息時間", "午休", "用餐", "加班餐"]
     core_articles:
       - law: "勞動基準法"
@@ -236,6 +271,7 @@ topics:
 
   overtime_meal:
     name: "加班餐費 / 補貼"
+    category: "procedure"
     keywords: ["加班餐", "餐費補助", "宵夜補助"]
     core_articles:
       - law: "勞動基準法"
@@ -245,6 +281,7 @@ topics:
 
   retirement_pension:
     name: "退休金 / 年資承接"
+    category: "right"
     keywords: ["退休金", "勞退", "年資", "舊制", "計算", "怎麼算"]
     core_articles:
       - law: "勞工退休金條例"
@@ -257,6 +294,7 @@ topics:
 
   wage_calculation:
     name: "工資計算 / 日薪換算"
+    category: "definition"
     keywords: ["月薪", "日薪", "換算", "計算方式", "怎麼算"]
     core_articles:
       - law: "勞動基準法"
@@ -269,6 +307,7 @@ topics:
 
   minimum_wage:
     name: "基本工資 / 最低工資"
+    category: "definition"
     keywords: ["基本工資", "最低工資", "工資多少", "現在", "是多少"]
     core_articles:
       - law: "勞動基準法"
@@ -281,6 +320,7 @@ topics:
 
   termination_employee:
     name: "解僱員工 / 終止契約"
+    category: "procedure"
     keywords: ["解僱", "開除", "終止", "契約", "隨時", "可以"]
     core_articles:
       - law: "勞動基準法"
@@ -290,6 +330,7 @@ topics:
 
   mass_layoff:
     name: "大量解僱"
+    category: "definition"
     keywords: ["大量解僱", "大量", "什麼是"]
     core_articles:
       - law: "大量解僱勞工保護法"
@@ -299,6 +340,7 @@ topics:
 
   occupational_injury_insurance:
     name: "職業災害保險"
+    category: "definition"
     keywords: ["職災", "受傷", "工作", "算", "保險", "通勤", "上班途中", "下班途中"]
     core_articles:
       - law: "勞動基準法"
@@ -311,7 +353,8 @@ topics:
 
   sick_leave:
     name: "病假 / 事假"
-    keywords: ["病假", "事假", "請假", "幾天", "可以請"]
+    category: "right"
+    keywords: ["病假", "事假", "生病請假", "病假幾天", "事假幾天", "病假天數"]
     core_articles:
       - law: "勞工請假規則"
         articles: ["4"]
@@ -323,6 +366,7 @@ topics:
   # 1. 懷孕保護（完整版）- 修復問題1
   pregnancy_protection:
     name: "懷孕保護 / 禁止歧視"
+    category: "right"
     keywords: ["懷孕", "孕婦", "妊娠", "產婦", "試用期懷孕", "懷孕終止", "懷孕解雇", "懷孕期間", "懷孕不適任"]
     core_articles:
       - law: "性別工作平等法"
@@ -336,11 +380,12 @@ topics:
   # 2. 通勤災害 - 修復問題11
   commute_accident:
     name: "通勤災害 / 上下班途中"
-    keywords: ["通勤", "上班途中", "下班途中", "上班路上", "下班路上", "通勤車禍", "途中受傷", "上下班", "往返途中", "執行職務"]
+    category: "definition"
+    keywords: ["通勤", "上班途中", "下班途中", "上班路上", "下班路上", "通勤車禍", "途中受傷", "上下班", "往返途中", "執行職務", "車禍", "路上"]
     core_articles:
       - law: "勞工職業災害保險及保護法"
         articles: ["6", "27"]
-        priority: 1.7
+        priority: 1.8
       - law: "勞動基準法"
         articles: ["59"]
         priority: 1.2
@@ -349,16 +394,18 @@ topics:
   # 3. 喪假 - 修復問題15
   bereavement_leave:
     name: "喪假 / 治喪假"
-    keywords: ["喪假", "治喪", "家人過世", "親人過世", "喪葬", "親屬死亡", "過世", "辦喪事"]
+    category: "right"
+    keywords: ["喪假", "治喪", "家人過世", "親人過世", "喪葬", "親屬死亡", "過世", "辦喪事", "喪假幾天", "喪假天數"]
     core_articles:
       - law: "勞工請假規則"
         articles: ["3"]
-        priority: 1.6
+        priority: 1.8
     guidance: "喪假必須引用《勞工請假規則》第3條，說明不同親屬關係的喪假天數（父母/配偶8天，祖父母/子女/兄弟姊妹6天等）。"
   
   # 4. 精神疾病職災 - 修復問題19
   mental_health_injury:
     name: "精神疾病 / 過勞 / 心理職災"
+    category: "definition"
     keywords: ["憂鬱症", "焦慮", "精神疾病", "心理", "壓力", "過勞", "職業病", "心理健康", "精神傷害", "心理傷害", "工作壓力"]
     core_articles:
       - law: "勞工職業災害保險及保護法"
@@ -372,6 +419,7 @@ topics:
   # 5. 育嬰留停復職 - 修復問題5
   parental_leave_return:
     name: "育嬰留停復職 / 復職權益"
+    category: "right"
     keywords: ["育嬰留停", "復職", "回來上班", "原職位", "育嬰復職", "留停後", "復工", "回復原職"]
     core_articles:
       - law: "性別工作平等法"
@@ -385,6 +433,7 @@ topics:
   # 6. 定期契約爭議 - 修復問題27
   fixed_term_contract:
     name: "定期契約 / 臨時工 / 約聘"
+    category: "definition"
     keywords: ["定期契約", "臨時工", "約聘", "契約到期", "不定期", "契約轉換", "定期工", "短期工", "繼續性", "臨時性"]
     core_articles:
       - law: "勞動基準法"
@@ -395,6 +444,7 @@ topics:
   # 7. 懷孕調職降薪 - 問題24已表現優異，強化配置
   pregnancy_transfer:
     name: "懷孕調職 / 母性保護"
+    category: "right"
     keywords: ["懷孕調職", "孕婦調職", "懷孕降薪", "妊娠期", "輕易工作", "孕期調整", "懷孕換工作", "孕婦安全"]
     core_articles:
       - law: "勞動基準法"

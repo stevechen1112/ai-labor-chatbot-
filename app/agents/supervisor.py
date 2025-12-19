@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from .receptionist import AnalysisResult
 from .lawyer import LawyerResponse
 from ..citation_validator import CitationValidator
-from ..law_guides import LawGuideEngine
+from ..law_guides import LawGuideEngine, TopicMatch
 
 
 class ReviewResult(BaseModel):
@@ -82,6 +82,19 @@ class SupervisorAgent:
         if not citation_valid.get("content_match", True):
             warnings.append("引用內容可能與官方版本有細微差異")
         
+        # 🆕 Phase 2.7: 主題-條文一致性檢查
+        topic_citation_issues = self._check_topic_citation_consistency(
+            query, citations
+        )
+        if topic_citation_issues.get("mismatch"):
+            warnings.append(
+                f"引用條文可能與查詢主題不一致：{topic_citation_issues['mismatch']}"
+            )
+        if topic_citation_issues.get("missing_definition"):
+            warnings.append(
+                f"查詢涉及定義性問題，建議補充：{topic_citation_issues['missing_definition']}"
+            )
+        
         # 2. 必備條文檢查
         missing_core = self._check_required_articles(analysis.topics, citations)
         if missing_core:
@@ -129,6 +142,85 @@ class SupervisorAgent:
             return ""
         cleaned = re.sub(r"\s+", "", name)
         return cleaned.lower()
+
+    def _check_topic_citation_consistency(
+        self,
+        query: str,
+        citations: List[Dict]
+    ) -> Dict:
+        """
+        🆕 Phase 2.7: 主題-條文一致性檢查
+        
+        使用多主題匹配來確保引用的條文與查詢主題一致。
+        
+        Returns:
+            {
+                "mismatch": str or None,  # 不一致描述
+                "missing_definition": str or None  # 缺少的定義性條文
+            }
+        """
+        result = {"mismatch": None, "missing_definition": None}
+        
+        if not self.law_guide_engine:
+            return result
+        
+        # 使用多主題匹配
+        matched_topics: List[TopicMatch] = self.law_guide_engine.match_topics(query, max_topics=3)
+        
+        if not matched_topics:
+            return result
+        
+        # 收集所有匹配主題的核心條文
+        expected_articles = set()
+        definition_articles = []
+        
+        for match in matched_topics:
+            for entry in match.guide.get("core_articles", []):
+                law = entry.get("law", "")
+                for art in entry.get("articles", []):
+                    expected_articles.add((self._normalize_law_key(law), str(art).strip()))
+                    # 標記定義性條文
+                    if match.category == "definition":
+                        definition_articles.append(f"{law}第{art}條")
+        
+        # 收集實際引用的條文
+        cited_articles = set()
+        for c in citations:
+            law = c.get("law_name") or c.get("law_id") or ""
+            art = str(c.get("article_no", "")).strip()
+            if law and art:
+                cited_articles.add((self._normalize_law_key(law), art))
+        
+        # 檢查是否有主要主題的條文完全缺失
+        best_topic = matched_topics[0]
+        best_topic_articles = set()
+        for entry in best_topic.guide.get("core_articles", []):
+            law = entry.get("law", "")
+            for art in entry.get("articles", []):
+                best_topic_articles.add((self._normalize_law_key(law), str(art).strip()))
+        
+        # 如果最佳匹配主題的所有條文都沒被引用，可能是主題不一致
+        if best_topic_articles and not (best_topic_articles & cited_articles):
+            topic_name = best_topic.guide.get("name", best_topic.topic_id)
+            result["mismatch"] = f"查詢主題為「{topic_name}」，但引用條文未包含相關核心條文"
+        
+        # 檢查定義性條文是否缺失（對於 definition 類型的主題）
+        if definition_articles:
+            definition_article_keys = set()
+            for match in matched_topics:
+                if match.category == "definition":
+                    for entry in match.guide.get("core_articles", []):
+                        law = entry.get("law", "")
+                        for art in entry.get("articles", []):
+                            definition_article_keys.add((self._normalize_law_key(law), str(art).strip()))
+            
+            missing_def = definition_article_keys - cited_articles
+            if missing_def and best_topic.category == "definition":
+                # Only warn if the primary topic is definition-type
+                missing_list = [f"{law}第{art}條" for law, art in list(missing_def)[:2]]
+                result["missing_definition"] = "、".join(missing_list)
+        
+        return result
 
     def _check_required_articles(
         self,

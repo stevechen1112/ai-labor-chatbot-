@@ -132,20 +132,47 @@ def hybrid_search(
     except Exception:
         heading_index = None
 
+    # ==================== 🆕 Phase 2.7: Multi-topic Matching ====================
+    # Replace "first match wins" with weighted multi-topic matching
     guide_engine = _get_guide_engine()
-    topic_id = None
+    matched_topics = []
+    definition_priority_articles = []  # Articles from definition-type topics
+    
     if guide_engine:
-        topic_id, _topic = guide_engine.match_topic(query)
-        if _topic:
-            topic_pref = guide_engine.get_preferred_laws(topic_id)
-            if topic_pref:
-                preferred_laws = (preferred_laws or []) + topic_pref
-            topic_block = guide_engine.get_blocked_laws(topic_id)
-            if topic_block:
-                blocked_laws = (blocked_laws or []) + topic_block
-            topic_prior = guide_engine.get_prior_articles(topic_id)
+        # Get ALL matching topics with scores
+        matched_topics = guide_engine.match_topics(query, max_topics=3)
+        
+        if matched_topics:
+            # Log matched topics for debugging
+            topic_names = [(m.topic_id, m.score, m.category) for m in matched_topics]
+            print(f"[Retrieval] Matched topics: {topic_names}")
+            
+            # Merge preferred laws from ALL matched topics
+            topic_preferred = guide_engine.get_merged_preferred_laws(matched_topics)
+            if topic_preferred:
+                preferred_laws = (preferred_laws or []) + topic_preferred
+            
+            # Merge blocked laws from ALL matched topics
+            topic_blocked = guide_engine.get_merged_blocked_laws(matched_topics)
+            if topic_blocked:
+                blocked_laws = (blocked_laws or []) + topic_blocked
+            
+            # Merge prior articles from ALL matched topics
+            topic_prior = guide_engine.get_merged_prior_articles(matched_topics)
             if topic_prior:
                 prior_articles = (prior_articles or []) + topic_prior
+            
+            # Identify definition-category topics and extract their articles
+            # These should be prioritized over procedure/penalty articles
+            for match in matched_topics:
+                if match.category == "definition":
+                    for entry in match.guide.get("core_articles", []):
+                        for art in entry.get("articles", []):
+                            if str(art) not in definition_priority_articles:
+                                definition_priority_articles.append(str(art))
+            
+            if definition_priority_articles:
+                print(f"[Retrieval] Definition-priority articles: {definition_priority_articles}")
 
     if vector_available():
         for s, d in vector_search(query, top_k=max(10, top_k)):
@@ -233,6 +260,14 @@ def hybrid_search(
             a = (d.get("article_no") or "")
             if any((pa == a) or (pa in (d.get("heading") or "")) for pa in prior_articles):
                 s += 0.20
+        
+        # 🆕 Phase 2.7: Definition-category articles get extra boost
+        # This systemically prioritizes foundational articles (like 第2條) over procedure articles
+        if definition_priority_articles:
+            art_no = str(d.get("article_no") or "").strip()
+            if art_no in definition_priority_articles:
+                s += 0.30  # Strong boost for definition articles
+        
         # Civil law penalty (unless explicitly mentioned in query)
         if "民法" in law_id or "民法" in title:
             # Only penalize if user didn't explicitly ask for civil law
@@ -241,11 +276,45 @@ def hybrid_search(
         items.append((s, d))
     items.sort(key=lambda x: x[0], reverse=True)
 
-    if topic_id and guide_engine:
-        items = guide_engine.boost_results(items, topic_id)
+    # 🆕 Phase 2.7: Apply boosts from ALL matched topics (not just first)
+    if matched_topics and guide_engine:
+        # Boost using the highest-scored matched topic
+        best_topic = matched_topics[0]
+        items = guide_engine.boost_results(items, best_topic.topic_id)
     
-    # 🆕 Phase 2.5: Force-retrieve prior_articles if missing
-    if prior_articles:
+    # 🆕 Phase 2.7: Force-retrieve definition-priority articles if missing
+    if definition_priority_articles:
+        from .articles import find_article
+        # Check which definition articles are missing from current results
+        current_articles = set()
+        for _, d in items:
+            art = d.get("article_no", "").strip()
+            if art:
+                current_articles.add(art)
+        
+        missing_def_articles = [pa for pa in definition_priority_articles if pa not in current_articles]
+        
+        if missing_def_articles:
+            print(f"[Retrieval] Force-retrieving {len(missing_def_articles)} missing definition articles: {missing_def_articles}")
+            target_law = preferred_laws[0] if preferred_laws else "勞動基準法"
+            for missing_art in missing_def_articles:
+                result = find_article(target_law, missing_art)
+                if result:
+                    # Add to items with very high score (definition articles are foundational)
+                    items.insert(0, (150.0, {
+                        "id": f"{target_law}_{missing_art}",
+                        "law_id": target_law,
+                        "article_no": missing_art,
+                        "heading": result.get("heading", ""),
+                        "text": result.get("text", ""),
+                        "source_file": result.get("source_file", ""),
+                        "chapter": result.get("chapter", ""),
+                        "title": target_law
+                    }))
+                    print(f"[Retrieval] Force-retrieved definition article: {target_law} 第{missing_art}條")
+    
+    # Force-retrieve other prior_articles if missing (lower priority than definition articles)
+    elif prior_articles:
         from .articles import find_article
         # Check which prior articles are missing from current results
         current_articles = set()
